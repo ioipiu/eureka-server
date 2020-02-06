@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SpringCloud测试</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="js/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<el-container id="app">
+    <el-header><h1 align="center">SpringCloud测试</h1></el-header>
+    <el-main>
+        <div v-if="flag==true">
+            <template>
+                <el-row style="width: 800px;margin: 0 auto">
+                    <el-button type="primary" @click="addBtn">添加学员</el-button>
+                </el-row>
+                <el-table
+                        stripe
+                        style="width: 800px;margin: 0 auto"
+                        :default-sort = "{prop: 'date', order: 'descending'}"
+                        :data="students.filter(data => !search || data.sname.toLowerCase().includes(search.toLowerCase()))">
+                    <el-table-column
+                            prop="sid"
+                            label="学号"
+                            sortable
+                            width="200"> 
+                        <template slot-scope="scope">
+                            <i class="el-icon-user"></i>
+                            <span style="margin-left: 10px">{{ scope.row.sid }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="sname"
+                            label="姓名"
+                            sortable
+                            width="200">
+                        <template slot-scope="scope">
+                            <el-popover trigger="hover" placement="top">
+                                <p>姓名: {{ scope.row.sname }}</p>
+                                <p>成绩: {{ scope.row.score }}</p>
+                                <div slot="reference" class="name-wrapper">
+                                    <el-tag size="medium">{{ scope.row.sname }}</el-tag>
+                                </div>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="sage"
+                            label="年龄"
+                            sortable
+                            width="200">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.sage }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="right" width="200px">
+                        <template slot="header" slot-scope="scope">
+                            <el-input
+                                    v-model="search"
+                                    size="mini"
+                                    placeholder="输入关键字搜索"/>
+                        </template>
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDelete(scope.$index, scope.row.sid)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+            <template>
+                <el-pagination
+                        align="center"
+                        style="margin-top: 20px"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="[5,10,20,30]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalPage">
+                </el-pagination>
+            </template>
+        </div>
+        <div v-if="flag==false">
+            <template>
+                <el-radio-group v-model="labelPosition" size="small" style="margin-left: 680px">
+                    <el-radio-button label="left">左对齐</el-radio-button>
+                    <el-radio-button label="right">右对齐</el-radio-button>
+                    <el-radio-button label="top">顶部对齐</el-radio-button>
+                </el-radio-group>
+                <div style="margin: 20px;"></div>
+                <el-form :label-position="labelPosition" label-width="80px" :model="student" style="width: 500px;margin: 0 auto">
+                    <el-form-item label="学员姓名">
+                        <el-input v-model="student.sname"></el-input>
+                    </el-form-item>
+                    <el-form-item label="学员年龄">
+                        <el-input v-model="student.sage"></el-input>
+                    </el-form-item>
+                    <el-form-item label="考试成绩">
+                        <el-input v-model="student.score"></el-input>
+                    </el-form-item>
+                    <el-row style="margin-top: 30px">
+                        <el-button type="primary" @click="addStu" v-if="btn==true">提交</el-button>
+                        <el-button type="primary" @click="updateStu" v-if="btn==false">修改</el-button>
+                        <el-button type="primary" @click="back">返回</el-button>
+                    </el-row>
+                </el-form>
+            </template>
+        </div>
+    </el-main>
+</el-container>
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
