@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.cloud.stupdr.dao.StuDao">
+    <select id="getCount" resultType="int">
+        select count(1) from student;
+    </select>
+
+    <select id="showStu" resultType="entity.Student">
+        select * from student order by sid asc limit #{start},#{pageSize}
+    </select>
+
+    <select id="getStuById" resultType="entity.Student">
+        select * from student where sid=#{sid}
+    </select>
+
+    <insert id="addStu">
+        insert into student values (null,#{stu.sname},#{stu.sage},#{stu.score})
+    </insert>
+
+    <update id="modifyStu">
+        update student
+        <set>
+            <if test="stu.sname !=null || stu.sname !='' ">
+                sname=#{stu.sname}
+            </if>
+            <if test="stu.sage !=null || stu.sage !='' ">
+                ,sage=#{stu.sage}
+            </if>
+            <if test="stu.score !=null || stu.score !='' ">
+                ,score=#{stu.score}
+            </if>
+        </set>
+        where sid=#{stu.sid}
+    </update>
+
+    <delete id="delStu">
+        delete from student where sid=#{sid}
+    </delete>
+
+</mapper>
